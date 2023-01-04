@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     Vector3 velocity;
     public float gravity = -19.62f;
     public bool IsWall;
+    public bool IsWallJ;
     //public int jumpTimes = 2;
 
     public Transform groundCheck;
@@ -17,6 +18,11 @@ public class Movement : MonoBehaviour
     bool isgrounded;
     public float downV = 6f;
     public float jumpHeight = 3f;
+
+    public Transform playertrans;
+    public WallRunning wallScript;
+    public bool canjump1 = false;
+
     void Update()
     {
         isgrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -44,28 +50,44 @@ public class Movement : MonoBehaviour
 
         controller.Move(move * speed * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump") && (isgrounded || !IsWall))
+        if (Input.GetButtonDown("Jump"))
         {
-            
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            if (isgrounded || canjump1)
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                if (canjump1 == true)
+                {
+                    canjump1 = false;
+                }
+            }
+            if (IsWall)
+            {
+                //if ((playertrans.rotation.y > wallScript.yAxisTarget + 3 || playertrans.rotation.y < wallScript.yAxisTarget - 3) && (playertrans.rotation.y < wallScript.yAxisTarget + 177 || playertrans.rotation.y > wallScript.yAxisTarget + 183))
+               // {
+                 //   Debug.Log("asd");
+                  //  velocity.y = Mathf.Sqrt((jumpHeight + 1) * -2f * gravity);
+
+               // }
+            }
         }
+        Debug.Log("yaxisobj : " + wallScript.yAxisTarget);
         if (IsWall)
         {
-            GvAdd();
+            downVRes2();
         }
         if (!IsWall)
         {
-            downVRes2();
+            GvAdd();
         }
         
 
         
         controller.Move(velocity * Time.deltaTime);
     }
-    public void downVRes()
-    {
-        velocity.y = downV;
-    }
+    //public void downVRes()
+    //{
+      //  velocity.y = downV;
+    //}
     public void downVRes2()
     {
         velocity.y += gravity/2 *Time.deltaTime;
