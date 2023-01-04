@@ -9,13 +9,10 @@ public class Movement : MonoBehaviour
     Vector3 velocity;
     public float gravity = -19.62f;
     public bool IsWall;
-    public bool IsWallJ;
-    //public int jumpTimes = 2;
-
     public Transform groundCheck;
     public float groundDistance = 0.8f;
     public LayerMask groundMask;
-    bool isgrounded;
+    public bool isgrounded;
     public float downV = 6f;
     public float jumpHeight = 3f;
 
@@ -35,7 +32,6 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            //if (isgrounded == true)
              speed = 22f; 
         }
 
@@ -50,27 +46,14 @@ public class Movement : MonoBehaviour
 
         controller.Move(move * speed * Time.deltaTime);
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump")&&(isgrounded || canjump1))
         {
-            if (isgrounded || canjump1)
-            {
-                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
                 if (canjump1 == true)
                 {
                     canjump1 = false;
                 }
-            }
-            if (IsWall)
-            {
-                //if ((playertrans.rotation.y > wallScript.yAxisTarget + 3 || playertrans.rotation.y < wallScript.yAxisTarget - 3) && (playertrans.rotation.y < wallScript.yAxisTarget + 177 || playertrans.rotation.y > wallScript.yAxisTarget + 183))
-               // {
-                 //   Debug.Log("asd");
-                  //  velocity.y = Mathf.Sqrt((jumpHeight + 1) * -2f * gravity);
-
-               // }
-            }
         }
-        Debug.Log("yaxisobj : " + wallScript.yAxisTarget);
         if (IsWall)
         {
             downVRes2();
@@ -84,10 +67,6 @@ public class Movement : MonoBehaviour
         
         controller.Move(velocity * Time.deltaTime);
     }
-    //public void downVRes()
-    //{
-      //  velocity.y = downV;
-    //}
     public void downVRes2()
     {
         velocity.y += gravity/2 *Time.deltaTime;
